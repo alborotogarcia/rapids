@@ -8,7 +8,7 @@ RUN cd /tmp; conda install -c conda-forge -c anaconda -c esri -y awscli boto3 co
 
 COPY array_ops.py /opt/conda/envs/rapids/lib/python3.8/site-packages/tensorflow/python/ops/array_ops.py
 
-RUN pip install --no-cache-dir --user git+https://github.com/cliffwoolley/jupyter_tensorboard.git git+https://github.com/chaoleili/jupyterlab_tensorboard.git wget bentoml git+https://github.com/opensearch-project/opensearch-py pandasticsearch torch torchvision torchaudio
+RUN pip install --no-cache-dir --user git+https://github.com/cliffwoolley/jupyter_tensorboard.git git+https://github.com/chaoleili/jupyterlab_tensorboard.git wget bentoml git+https://github.com/opensearch-project/opensearch-py pandasticsearch torch torchvision torchaudio torchtext
 RUN jupyter labextension install @finos/perspective-jupyterlab; jupyter labextension install @krassowski/jupyterlab-lsp; jupyter labextension install @finos/perspective-viewer-d3fc;  jupyter lab clean;
 
 ENV PATH=$PATH:/root/.local/bin
