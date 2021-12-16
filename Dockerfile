@@ -2,7 +2,7 @@ FROM rapidsai/rapidsai:21.12-cuda11.4-runtime-ubuntu20.04-py3.8
 
 ENV PATH /opt/conda/envs/rapids/bin:$PATH
 ENV CONDA_DEFAULT_ENV rapids
-RUN cd /tmp; conda install -c conda-forge -c anaconda -c esri -y awscli boto3 conda-build dash jupyter-dash bqplot plotly ipympl jupyter-lsp-python jedi-language-server python-lsp-server jupyterlab-lsp perspective jupyterlab-git turbodbc selenium minio mlflow psycopg2 voila lxml bs4 wget tensorflow-gpu unidecode tqdm elasticsearch elasticsearch-dbapi[opendistro] elasticsearch-dsl statsmodels libthrift==0.14.2; git clone https://github.com/alborotogarcia/conda-spektral; cd conda-spektral/conda-recipes; conda build . ;conda clean -tipy;
+RUN cd /tmp; conda install -c conda-forge -c anaconda -c esri -y awscli boto3 conda-build dash jupyter-dash bqplot plotly ipympl jupyter-lsp-python jedi-language-server python-lsp-server jupyterlab-lsp perspective jupyterlab-git turbodbc selenium minio mlflow psycopg2 voila lxml bs4 wget tensorflow-gpu unidecode tqdm elasticsearch elasticsearch-dbapi[opendistro] prophet elasticsearch-dsl statsmodels libthrift==0.14.2; git clone https://github.com/alborotogarcia/conda-spektral; cd conda-spektral/conda-recipes; conda build . ;conda clean -tipy;
 
 # RUN conda install -c conda-forge  pytorch-gpu torchvision torchaudio # breaks rapids cudatoolkit, prob try with pip wheel built
 
