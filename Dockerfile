@@ -1,4 +1,4 @@
-FROM rapidsai/rapidsai:21.12-cuda11.4-runtime-ubuntu20.04-py3.8
+FROM rapidsai/rapidsai:22.04-cuda11.4-runtime-ubuntu20.04-py3.8
 
 ENV PATH /opt/conda/envs/rapids/bin:$PATH
 ENV CONDA_DEFAULT_ENV rapids
