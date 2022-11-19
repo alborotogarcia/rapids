@@ -2,14 +2,21 @@ FROM rapidsai/rapidsai:22.10-cuda11.5-runtime-ubuntu20.04-py3.8
 
 # FROM rapidsai/rapidsai:22.04-cuda11.5-runtime-ubuntu20.04-py3.8
 
-ARG SCALA_VERSION=2.12.17 ALMOND_VERSION=0.13.1 SPARK_VERSION=3.3.1 AMMONITE_VERSION=2.5.5 CUDNN_VERSION=8.2.1.32 LIBTHRIFT_VERSION=0.16.0 PLOTLY_VERSION=0.8.4 METALS_VERSION=0.11.2
-# METALS_VERSION=0.11.9 SCALA_VERSION=2.13.8
-ENV PATH=/opt/conda/envs/rapids/bin:/root/.local/bin:$PATH:$SPARK_HOME/bin CONDA_DEFAULT_ENV=rapids SPARK_HOME=/opt/spark SPARK_VERSION=$SPARK_VERSION ALMOND_VERSION=$ALMOND_VERSION SCALA_VERSION=$SCALA_VERSION AMMONITE_VERSION=$AMMONITE_VERSION CUDNN_VERSION=$CUDNN_VERSION LIBTHRIFT_VERSION=$LIBTHRIFT_VERSION PLOTLY_VERSION=$PLOTLY_VERSION METALS_VERSION=$METALS_VERSION LD_LIBRARY_PATH=/opt/conda/envs/rapids/lib
+# ARG SCALA_VERSION=2.12.17 METALS_VERSION=0.11.2
 
+ARG SPARK_VERSION=3.3.1 CUDNN_VERSION=8.2.1.32 LIBTHRIFT_VERSION=0.16.0
+ENV CUDNN_VERSION=$CUDNN_VERSION LIBTHRIFT_VERSION=$LIBTHRIFT_VERSION SPARK_VERSION=$SPARK_VERSION PATH=/opt/conda/envs/rapids/bin:/root/.local/bin:$PATH:$SPARK_HOME/bin CONDA_DEFAULT_ENV=rapids SPARK_HOME=/opt/spark LD_LIBRARY_PATH=/opt/conda/envs/rapids/lib
+
+RUN conda update -nbase conda -y; cd /tmp; source /opt/conda/bin/activate $CONDA_DEFAULT_ENV; conda install -c conda-forge -c anaconda -c pytorch -c pyviz -y magma-cuda115 awscli boto3 conda-build dash jupyter-dash bqplot plotly ipympl jupyter-lsp-python jedi-language-server python-lsp-server jupyterlab-lsp jupyterlab-git turbodbc selenium minio mlflow psycopg2 lxml bs4 wget unidecode tqdm elasticsearch elasticsearch-dbapi[opendistro] prophet elasticsearch-dsl statsmodels libthrift==$LIBTHRIFT_VERSION cudnn==$CUDNN_VERSION pyspark==$SPARK_VERSION ipyvuetify ipyvue ; conda clean -tipy; apt-get update; apt-get install --no-install-recommends -y vim openjdk-8-jdk; rm -rf /var/lib/apt/lists/*;
+
+ARG ALMOND_VERSION=0.13.2 AMMONITE_VERSION=2.5.5 PLOTLY_VERSION=0.8.4 SCALA_VERSION=2.12.17 METALS_VERSION=0.11.2
+# METALS_VERSION=0.11.9 SCALA_VERSION=2.13.10
+ENV ALMOND_VERSION=$ALMOND_VERSION SCALA_VERSION=$SCALA_VERSION AMMONITE_VERSION=$AMMONITE_VERSION PLOTLY_VERSION=$PLOTLY_VERSION METALS_VERSION=$METALS_VERSION
 
 # RUN cd /tmp; source /opt/conda/bin/activate $CONDA_DEFAULT_ENV; 
 # RUN cd /tmp; source /opt/conda/envs/rapids/bin/activate; 
-RUN conda update -nbase conda -y; cd /tmp; source /opt/conda/bin/activate $CONDA_DEFAULT_ENV; conda install -c conda-forge -c anaconda -c pytorch -c pyviz -y magma-cuda115 awscli boto3 conda-build dash jupyter-dash bqplot plotly ipympl jupyter-lsp-python jedi-language-server python-lsp-server jupyterlab-lsp jupyterlab-git turbodbc selenium minio mlflow psycopg2 lxml bs4 wget unidecode tqdm elasticsearch elasticsearch-dbapi[opendistro] prophet elasticsearch-dsl statsmodels libthrift==$LIBTHRIFT_VERSION cudnn==$CUDNN_VERSION pyspark==$SPARK_VERSION ipyvuetify ipyvue ; conda clean -tipy; apt-get update; apt-get install --no-install-recommends -y vim openjdk-8-jdk; wget https://downloads.lightbend.com/scala/$SCALA_VERSION/scala-$SCALA_VERSION.deb ; dpkg -i scala-$SCALA_VERSION.deb; rm -rf scala-$SCALA_VERSION.deb; rm -rf /var/lib/apt/lists/*;
+
+RUN wget https://downloads.lightbend.com/scala/$SCALA_VERSION/scala-$SCALA_VERSION.deb ; dpkg -i scala-$SCALA_VERSION.deb; rm -rf scala-$SCALA_VERSION.deb; rm -rf /var/lib/apt/lists/*;
 
 # RUN conda install -c conda-forge  pytorch-gpu torchvision torchaudio # breaks rapids cudatoolkit, prob try with pip wheel built
 # COPY array_ops.py /opt/conda/envs/rapids/lib/python3.8/site-packages/tensorflow/python/ops/array_ops.py
@@ -46,7 +53,7 @@ import \$ivy.\`org.scalatest:scalatest_2.12:3.2.14\` ; \
 import \$ivy.\`org.apache.spark::spark-sql-kafka-0-10:$SPARK_VERSION\` ; \
 import \$ivy.\`org.apache.spark::spark-streaming:$SPARK_VERSION\` ; "
 
-RUN pip install --no-cache protobuf==3.20.1 apache-beam[gcp,interactive,dataframe]==2.43.0rc2 
+RUN pip install --no-cache protobuf==3.20.1 apache-beam[gcp,interactive,dataframe]==2.43.0
 RUN source /opt/conda/bin/activate $CONDA_DEFAULT_ENV; conda install -y google-auth; conda clean -tipy;
 # RUN pip3 install --no-cache /tmp/voila_vuetify-0.5.2-py2.py3-none-any.whl 'voila>=0.3'
 # apache-beam[gcp,interactive,dataframe] google-cloud-pubsub google-cloud-bigquery 
